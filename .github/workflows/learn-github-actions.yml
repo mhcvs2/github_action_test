@@ -4,5 +4,6 @@ jobs:
   test_job1:
     runs-on: [self-hosted, test]
     steps:
+      - uses: actions/checkout@master
       - run: pwd
       - run: ls ./
