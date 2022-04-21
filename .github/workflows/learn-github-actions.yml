@@ -1,7 +1,8 @@
 name: learn-github-actions
 on: [push]
 jobs:
-  check-bats-version:
-    runs-on: self-hosted
+  test_job1:
+    runs-on: [self-hosted, test]
     steps:
       - run: pwd
+      - run: ls ./
