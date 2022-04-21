@@ -1,8 +1,23 @@
 name: learn-github-actions
 on: [push]
 jobs:
-  test_job1:
+#  test_job1:
+#    runs-on: [self-hosted, test]
+#    steps:
+#      - uses: actions/checkout@master
+#      - run: pwd
+#      - run: ls ./
+  test_job2:
     runs-on: [self-hosted, test]
+    container:
+      image: registry.cn-hangzhou.aliyuncs.com/mhc_base/net-tools:latest
+      env:
+        NODE_ENV: development
+      ports:
+        - 80
+#      volumes:
+#        - my_docker_volume:/volume_mount
+      options: --cpus 1
     steps:
       - uses: actions/checkout@master
       - run: pwd
