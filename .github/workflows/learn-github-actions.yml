@@ -7,8 +7,30 @@ jobs:
 #      - uses: actions/checkout@master
 #      - run: pwd
 #      - run: ls ./
-  test_job2:
+#  test_job2:
+#    runs-on: [self-hosted, test]
+#    container:
+#      image: registry.cn-hangzhou.aliyuncs.com/mhc_base/net-tools:latest
+#      env:
+#        NODE_ENV: development
+#      ports:
+#        - 80
+##      volumes:
+##        - my_docker_volume:/volume_mount
+#      options: --cpus 1
+#    steps:
+#      - uses: actions/checkout@master
+#      - run: pwd
+#      - run: ls ./
+#      - run: ls /
+#      - run: echo $NODE_ENV
+  test_job3:
     runs-on: [self-hosted, test]
+    services:
+      nginx:
+        image: nginx
+        ports:
+          - 8080:80
     container:
       image: registry.cn-hangzhou.aliyuncs.com/mhc_base/net-tools:latest
       env:
@@ -19,8 +41,4 @@ jobs:
 #        - my_docker_volume:/volume_mount
       options: --cpus 1
     steps:
-      - uses: actions/checkout@master
-      - run: pwd
-      - run: ls ./
-      - run: ls /
-      - run: echo $NODE_ENV
+      - run: curl nginx:80
