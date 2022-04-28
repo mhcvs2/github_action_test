@@ -1,5 +1,6 @@
 name: other
-on: [push]
+on:
+  workflow_dispatch:
 jobs:
  test_job1:
    runs-on: [self-hosted, test]
