@@ -1,12 +1,12 @@
 name: learn-github-actions
 on: [push]
 jobs:
-#  test_job1:
-#    runs-on: [self-hosted, test]
-#    steps:
-#      - uses: actions/checkout@master
-#      - run: pwd
-#      - run: ls ./
+ test_job1:
+   runs-on: [self-hosted, test]
+   steps:
+     - uses: actions/checkout@master
+     - run: pwd
+     - run: ls ./
 #  test_job2:
 #    runs-on: [self-hosted, test]
 #    container:
@@ -15,30 +15,30 @@ jobs:
 #        NODE_ENV: development
 #      ports:
 #        - 80
-##      volumes:
-##        - my_docker_volume:/volume_mount
+# #      volumes:
+# #        - my_docker_volume:/volume_mount
 #      options: --cpus 1
-#    steps:
-#      - uses: actions/checkout@master
-#      - run: pwd
-#      - run: ls ./
-#      - run: ls /
-#      - run: echo $NODE_ENV
-  test_job3:
-    runs-on: [self-hosted, test]
-    services:
-      nginx:
-        image: nginx
-        ports:
-          - 8080:80
-    container:
-      image: centos:7
-      env:
-        NODE_ENV: development
-      ports:
-        - 80
-#      volumes:
-#        - my_docker_volume:/volume_mount
-      options: --cpus 1
-    steps:
-      - run: curl nginx:80
+  #  steps:
+  #    - uses: actions/checkout@master
+  #    - run: pwd
+  #    - run: ls ./
+  #    - run: ls /
+  #    - run: echo $NODE_ENV
+#   test_job3:
+#     runs-on: [self-hosted, test]
+#     services:
+#       nginx:
+#         image: nginx
+#         ports:
+#           - 8080:80
+#     container:
+#       image: centos:7
+#       env:
+#         NODE_ENV: development
+#       ports:
+#         - 80
+# #      volumes:
+# #        - my_docker_volume:/volume_mount
+#       options: --cpus 1
+#     steps:
+#       - run: curl nginx:80
