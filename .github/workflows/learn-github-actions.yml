@@ -5,8 +5,11 @@ jobs:
    runs-on: [self-hosted, test]
    steps:
      - uses: actions/checkout@master
+     - uses: travisj/build-number-action@v1
+       id: project-build-number
      - run: pwd
      - run: ls ./
+     - run: echo ${{ steps.project-build-number.outputs.build-number }}
 #  test_job2:
 #    runs-on: [self-hosted, test]
 #    container:

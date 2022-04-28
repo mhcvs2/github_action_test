@@ -1,14 +1,17 @@
 name: other
-on:
-  workflow_dispatch:
+on: [push]
 jobs:
  test_job1:
    runs-on: [self-hosted, test]
    steps:
+    # 调用官方 action 生成build-number
+     - uses: travisj/build-number-action@v1
+       id: project-build-number
      - run: echo ahahah..................
      - run: ls ./
      - run: ls /
      - run: echo $NODE_ENV
+     - run: echo ${{ steps.project-build-number.outputs.build-number }}
 #   test_job3:
 #     runs-on: [self-hosted, test]
 #     services:
