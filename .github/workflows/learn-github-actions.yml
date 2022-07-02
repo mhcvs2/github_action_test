@@ -51,7 +51,7 @@ jobs:
         scope: '@qiduoduo-inc'
         registry: 'https://npm.pkg.github.com'
         auth-token: ${{ secrets.npm_token }}
-        path: /home/runner/
+        path: /home/github/
 
     - name: '使用缓存安装npm依赖包'
       uses: bahmutov/npm-install@v1
