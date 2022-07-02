@@ -15,7 +15,7 @@ jobs:
       with:
         persist-credentials: false
         repository: qiduoduo-inc/front-circle-node-server
-        token: ${{ srcrets.token }}
+        token: ${{ secrets.token }}
         ref: dev
         path: front-circle-node-server
 
