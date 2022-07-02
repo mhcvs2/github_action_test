@@ -14,9 +14,8 @@ jobs:
       uses: actions/checkout@v3
       with:
         persist-credentials: false
-        repository: 'qiduoduo-inc/front-circle-node-server'
-        ssh-key: ${{ secrets.SSH_KEY }}
-        ref: 'dev'
+        repository: qiduoduo-inc/front-circle-node-server
+        ref: dev
         path: front-circle-node-server
 
     - run: ls ./
