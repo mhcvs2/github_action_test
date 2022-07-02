@@ -23,6 +23,19 @@ jobs:
      - run: pwd
      - run: ls ./
      - run: echo ${{ steps.project-build-number.outputs.build-number }}
+# on:
+#   pull_request:
+#     types: [closed]
+#     branched: 
+#     - dev
+# jobs:
+#   if_merged:
+#     if: github.event.pull_request.merged == true
+#     runs-on: [self-hosted, test]
+#     steps: 
+#     - uses: actions/checkout@v3
+#     - run: echo pull request was merged....
+#     - run: cat a.py
 #  test_job2:
 #    runs-on: [self-hosted, test]
 #    container:
