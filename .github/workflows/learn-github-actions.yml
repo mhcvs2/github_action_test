@@ -17,7 +17,7 @@ jobs:
         ref: 'dev'
         path: front-circle-node-server
 
-    - name： "下载测试项目"
+    - name: '下载测试项目'
       uses: actions/checkout@v3
       with:
         persist-credentials: false
@@ -25,7 +25,7 @@ jobs:
         ref: 'dev'
         path: 'front-circle-test'
 
-    - name: "下载测试数据"
+    - name: '下载测试数据'
       uses: actions/checkout@v3
       with:
         persist-credentials: false
