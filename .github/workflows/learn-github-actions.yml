@@ -9,7 +9,7 @@ jobs:
   test_job1:
     runs-on: [self-hosted, test]
     steps:
-    - run: "echo ${{ github.repository }}"
+    - run: "echo ${{ github.repository }}; echo ${{ github.token }}"
     - name: '下载要合并的分支代码'
       uses: actions/checkout@v3
       with:
