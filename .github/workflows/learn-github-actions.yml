@@ -53,26 +53,26 @@ jobs:
         auth-token: ${{ secrets.token }}
         path: /home/github/
 
-    - name: '使用缓存安装npm依赖包'
-      uses: bahmutov/npm-install@v1
-      with:
-        useLockFile: true
-        working-directory: 'front-circle-node-server'
+#    - name: '使用缓存安装npm依赖包'
+#      uses: bahmutov/npm-install@v1
+#      with:
+#        useLockFile: true
+#        working-directory: 'front-circle-node-server'
 
-    - name: '使用缓存安装npm依赖包'
-      uses: bahmutov/npm-install@v1
-      with:
-        useLockFile: true
-        working-directory: front-circle-test
+#    - name: '使用缓存安装npm依赖包'
+#      uses: bahmutov/npm-install@v1
+#      with:
+#        useLockFile: true
+#        working-directory: front-circle-test
 
     - name: '启动server'
-      run: 'cd front-circle-node-server; nohup npm run dev &'
+      run: 'cd front-circle-node-server; npm install; nohup npm run dev &'
 
     - name: '等待server启动'
       run: 'sleep 5'
 
     - name: '安装playwright'
-      run: 'cd front-circle-test; npx playwright install'
+      run: 'cd front-circle-test; npm install; npx playwright install'
 
     - name: '执行playwright测试'
       run: 'cd front-circle-test; npx playwright test tests/backend/midway/'
