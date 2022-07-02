@@ -26,7 +26,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         persist-credentials: false
-        repository: 'git@github.com:qiduoduo-inc/front-circle-test.git'
+        repository: 'qiduoduo-inc/front-circle-test'
         token: ${{ secrets.token }}
         ref: dev
         path: front-circle-test
@@ -35,53 +35,53 @@ jobs:
       uses: actions/checkout@v3
       with:
         persist-credentials: false
-        repository: 'git@github.com:qiduoduo-inc/front-circle-data.git'
+        repository: 'qiduoduo-inc/front-circle-data'
         token: ${{ secrets.token }}
         ref: dev
         path: front-circle-data
 
-      - name: '配置Node 16.15.1环境'
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.15.1'
+    - name: '配置Node 16.15.1环境'
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.15.1'
 
-      - name: 'npm登录npm.pkg.github.com私有镜像'
-        uses: healthplace/npmrc-registry-login-action@v1.0.9
-        with:
-          scope: '@qiduoduo-inc'
-          registry: 'https://npm.pkg.github.com'
-          auth-token: ${{ secrets.npm_token }}
-          path: /home/runner/
+    - name: 'npm登录npm.pkg.github.com私有镜像'
+      uses: healthplace/npmrc-registry-login-action@v1.0.9
+      with:
+        scope: '@qiduoduo-inc'
+        registry: 'https://npm.pkg.github.com'
+        auth-token: ${{ secrets.npm_token }}
+        path: /home/runner/
 
-      - name: '使用缓存安装npm依赖包'
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: true
-          working-directory: 'front-circle-node-server'
+    - name: '使用缓存安装npm依赖包'
+      uses: bahmutov/npm-install@v1
+      with:
+        useLockFile: true
+        working-directory: 'front-circle-node-server'
 
-      - name: '使用缓存安装npm依赖包'
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: true
-          working-directory: front-circle-test
+    - name: '使用缓存安装npm依赖包'
+      uses: bahmutov/npm-install@v1
+      with:
+        useLockFile: true
+        working-directory: front-circle-test
 
-      - name: '启动server'
-        run: nohup npm run dev &
-        with:
-          working-directory: front-circle-node-server
+    - name: '启动server'
+      run: nohup npm run dev &
+      with:
+        working-directory: front-circle-node-server
 
-      - name: '等待server启动'
-        run: 'sleep 5'
+    - name: '等待server启动'
+      run: 'sleep 5'
 
-      - name: '安装playwright'
-        run: npx playwright install
-        with:
-          working-directory: front-circle-test
+    - name: '安装playwright'
+      run: npx playwright install
+      with:
+        working-directory: front-circle-test
 
-      - name: '执行playwright测试'
-        run: 'npx playwright test tests/backend/midway/'
-        with:
-          working-directory: front-circle-test
+    - name: '执行playwright测试'
+      run: 'npx playwright test tests/backend/midway/'
+      with:
+        working-directory: front-circle-test
 
   # test_job1:
   #   runs-on: [self-hosted, test]
