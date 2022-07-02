@@ -20,22 +20,25 @@ jobs:
         path: front-circle-node-server
 
     - run: ls ./
-    - run: 'echo ----------------------; run ./front-circle-node-server'
-#    - name: '下载测试项目'
-#      uses: actions/checkout@v3
-#      with:
-#        persist-credentials: false
-#        repository: 'git@github.com:qiduoduo-inc/front-circle-test.git'
-#        ref: 'dev'
-#        path: front-circle-test
-#
-#    - name: '下载测试数据'
-#      uses: actions/checkout@v3
-#      with:
-#        persist-credentials: false
-#        repository: 'git@github.com:qiduoduo-inc/front-circle-data.git'
-#        ref: 'dev'
-#        path: front-circle-data
+    - run: 'echo ----------------------; ls ./front-circle-node-server'
+
+    - name: '下载测试项目'
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        repository: 'git@github.com:qiduoduo-inc/front-circle-test.git'
+        token: ${{ secrets.token }}
+        ref: 'dev'
+        path: front-circle-test
+
+    - name: '下载测试数据'
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        repository: 'git@github.com:qiduoduo-inc/front-circle-data.git'
+        token: ${{ secrets.token }}
+        ref: 'dev'
+        path: front-circle-data
 #
 #      - name: '配置Node 16.15.1环境'
 #        uses: actions/setup-node@v3
