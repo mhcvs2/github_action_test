@@ -28,7 +28,7 @@ jobs:
         persist-credentials: false
         repository: 'git@github.com:qiduoduo-inc/front-circle-test.git'
         token: ${{ secrets.token }}
-        ref: 'dev'
+        ref: dev
         path: front-circle-test
 
     - name: '下载测试数据'
@@ -37,7 +37,7 @@ jobs:
         persist-credentials: false
         repository: 'git@github.com:qiduoduo-inc/front-circle-data.git'
         token: ${{ secrets.token }}
-        ref: 'dev'
+        ref: dev
         path: front-circle-data
 #
 #      - name: '配置Node 16.15.1环境'
