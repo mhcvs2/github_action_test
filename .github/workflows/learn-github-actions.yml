@@ -66,22 +66,16 @@ jobs:
         working-directory: front-circle-test
 
     - name: '启动server'
-      run: nohup npm run dev &
-      with:
-        working-directory: front-circle-node-server
+      run: 'cd front-circle-node-server; nohup npm run dev &'
 
     - name: '等待server启动'
       run: 'sleep 5'
 
     - name: '安装playwright'
-      run: npx playwright install
-      with:
-        working-directory: front-circle-test
+      run: 'cd front-circle-test; npx playwright install'
 
     - name: '执行playwright测试'
-      run: 'npx playwright test tests/backend/midway/'
-      with:
-        working-directory: front-circle-test
+      run: 'cd front-circle-test; npx playwright test tests/backend/midway/'
 
   # test_job1:
   #   runs-on: [self-hosted, test]
