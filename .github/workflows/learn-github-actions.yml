@@ -1,10 +1,10 @@
 name: learn-github-actions
 # on: [push]
 on:
-pull_request:
-  types: [opened, reopened ]
-  branched: 
-  - dev
+  pull_request:
+    types: [opened, reopened ]
+    branched: 
+    - dev
 jobs:
   test_job1:
     runs-on: [self-hosted, test]
