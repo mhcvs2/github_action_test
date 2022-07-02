@@ -1,0 +1,47 @@
+name: merge test
+# on: [push]
+on:
+  pull_request:
+    types: [closed]
+    branched: 
+    - dev
+jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: [self-hosted, test]
+    steps: 
+    - uses: actions/checkout@v3
+    - run: echo pull request was merged....
+    - run: cat a.py
+# name: other
+# on: [push]
+# jobs:
+#  test_job1:
+#    runs-on: [self-hosted, test]
+#    steps:
+#     # 调用官方 action 生成build-number
+#      - uses: travisj/build-number-action@v1
+#        id: project-build-number
+#      - run: echo ahahah..................
+#      - run: ls ./
+#      - run: ls /
+#      - run: echo $NODE_ENV
+#      - run: echo ${{ steps.project-build-number.outputs.build-number }}
+#   test_job3:
+#     runs-on: [self-hosted, test]
+#     services:
+#       nginx:
+#         image: nginx
+#         ports:
+#           - 8080:80
+#     container:
+#       image: centos:7
+#       env:
+#         NODE_ENV: development
+#       ports:
+#         - 80
+# #      volumes:
+# #        - my_docker_volume:/volume_mount
+#       options: --cpus 1
+#     steps:
+#       - run: curl nginx:80
