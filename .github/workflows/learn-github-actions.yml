@@ -15,7 +15,7 @@ jobs:
       with:
         persist-credentials: false
         repository: 'qiduoduo-inc/front-circle-node-server'
-        token: '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'
+        ssh-key: ${{ secrets.SSH_KEY }}
         ref: 'dev'
         path: front-circle-node-server
 
