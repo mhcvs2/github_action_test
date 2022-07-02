@@ -6,23 +6,23 @@ on:
     # branched: 
     # - dev
 jobs:
-  # test_job1:
-  #   runs-on: [self-hosted, test]
-  #   steps: 
-  #   - uses: actions/checkout@v3
-  #     with: 
-  #       ref: '${GITHUB_HEAD_REF}'
-  #   - run: echo pull request opened....
-  #   - run: cat a.py
- test_job1:
-   runs-on: [self-hosted]
-   steps:
-     - uses: actions/checkout@master
-     - uses: travisj/build-number-action@v1
-       id: project-build-number
-     - run: pwd
-     - run: ls ./
-     - run: echo ${{ steps.project-build-number.outputs.build-number }}
+  test_job1:
+    runs-on: [self-hosted, test]
+    steps: 
+    - uses: actions/checkout@v3
+      with: 
+        ref: '${GITHUB_HEAD_REF}'
+    - run: echo pull request opened....
+    - run: cat a.py
+#  test_job1:
+#    runs-on: [self-hosted]
+#    steps:
+#      - uses: actions/checkout@master
+#      - uses: travisj/build-number-action@v1
+#        id: project-build-number
+#      - run: pwd
+#      - run: ls ./
+#      - run: echo ${{ steps.project-build-number.outputs.build-number }}
 # on:
 #   pull_request:
 #     types: [closed]
