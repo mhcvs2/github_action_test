@@ -23,7 +23,7 @@ jobs:
         persist-credentials: false
         repository: 'git@github.com:qiduoduo-inc/front-circle-test.git'
         ref: 'dev'
-        path: 'front-circle-test'
+        path: front-circle-test
 
     - name: '下载测试数据'
       uses: actions/checkout@v3
@@ -31,7 +31,7 @@ jobs:
         persist-credentials: false
         repository: 'git@github.com:qiduoduo-inc/front-circle-data.git'
         ref: 'dev'
-        path: 'front-circle-data'
+        path: front-circle-data
 
       - name: '配置Node 16.15.1环境'
         uses: actions/setup-node@v3
@@ -44,7 +44,7 @@ jobs:
           scope: '@qiduoduo-inc'
           registry: 'https://npm.pkg.github.com'
           auth-token: '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'
-          path: '/home/runner/'
+          path: /home/runner/
 
       - name: '使用缓存安装npm依赖包'
         uses: bahmutov/npm-install@v1
@@ -56,12 +56,12 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           useLockFile: true
-          working-directory: 'front-circle-test'
+          working-directory: front-circle-test
 
       - name: '启动server'
         run: nohup npm run dev &
         with:
-          working-directory: 'front-circle-node-server'
+          working-directory: front-circle-node-server
 
       - name: '等待server启动'
         run: 'sleep 5'
@@ -69,12 +69,12 @@ jobs:
       - name: '安装playwright'
         run: npx playwright install
         with:
-          working-directory: 'front-circle-test'
+          working-directory: front-circle-test
 
       - name: '执行playwright测试'
         run: 'npx playwright test tests/backend/midway/'
         with:
-          working-directory: 'front-circle-test'
+          working-directory: front-circle-test
 
   # test_job1:
   #   runs-on: [self-hosted, test]
