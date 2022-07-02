@@ -9,10 +9,10 @@ jobs:
   test_job1:
     runs-on: [self-hosted, test]
     steps: 
-    - run: echo ${{GITHUB_HEAD_REF}}
+    - run: echo ${{GITHUB_REF}}
     - uses: actions/checkout@v3
       with: 
-        ref: '${{GITHUB_HEAD_REF}}'
+        ref: '${{GITHUB_REF}}'
     - run: echo pull request opened....
     - run: cat a.py
 #  test_job1:
