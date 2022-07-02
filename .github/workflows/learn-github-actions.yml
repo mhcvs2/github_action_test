@@ -1,5 +1,4 @@
 name: learn-github-actions
-<<<<<<< HEAD
 # on: [push]
 on:
   pull_request:
