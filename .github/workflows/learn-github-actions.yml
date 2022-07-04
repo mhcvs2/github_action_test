@@ -17,7 +17,7 @@ jobs:
             mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 
           # wait mysql
-          timeout 30 sh -c 'until nc -z localhost 3307; do sleep 1; done'
+          timeout 30 sh -c 'until nc -z localhost 3306; do sleep 1; done'
 # jobs:
 #   test_job1:
 #     runs-on: ubuntu-latest
