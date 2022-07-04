@@ -49,13 +49,13 @@ jobs:
     - name: '使用缓存安装npm依赖包'
       uses: bahmutov/npm-install@v1
       with:
-        useLockFile: true
+        useLockFile: false
         working-directory: front-circle-node-server
 
     - name: '使用缓存安装npm依赖包2'
       uses: bahmutov/npm-install@v1
       with:
-        useLockFile: true
+        useLockFile: false
         working-directory: front-circle-test
 
     - name: '启动MySQL 5.7和Redis服务'
