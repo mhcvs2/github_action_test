@@ -16,12 +16,8 @@ jobs:
             -v ${PWD}/database/:/tmp/database/ \
             mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 
-      - uses:  jeffbski/wait-on
-        with:
-          resource: tcp://localhost:3306
-          interval: 1000
-          timeout: 30000
-          tcpTimeout: 3000
+          # wait mysql
+          timeout 30 sh -c 'until nc -z localhost 3307; do sleep 1; done'
 # jobs:
 #   test_job1:
 #     runs-on: ubuntu-latest
