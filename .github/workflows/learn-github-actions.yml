@@ -1,77 +1,97 @@
 name: "[CI] Pre Pull Request Test 合并之前的接口测试"
 on:
-  pull_request:
-    types: [opened, reopened ]
+  push:
+    # types: [opened, reopened ]
 jobs:
   test_job1:
-    runs-on: ubuntu-latest
+    runs-on: ['self-hosted']
+    services:
+      mysql: 
+        image: mysql:5.7
+        ports: 
+        - 3306:3306
+        envs:
+        - MYSQL_ROOT_PASSWORD: 123456
+        - MYSQL_DATABASE: front_circle_test
     steps:
-    - name: '下载要合并的分支代码'
-      uses: actions/checkout@v3
-      with:
-        persist-credentials: false
-        repository: 'qiduoduo-inc/front-circle-node-server'
-        ref: dev
-        token: ${{ secrets.token }}
-        path: front-circle-node-server
+      - run: docker ps -a
+# jobs:
+#   test_job1:
+#     runs-on: ubuntu-latest
+#     services:
+#       mysql: 
+#         image: mysql:5.7
+#         ports: 
+#         - 3306:3306
+#         volumes: 
+#         - 
+#     steps:
+#     - name: '下载要合并的分支代码'
+#       uses: actions/checkout@v3
+#       with:
+#         persist-credentials: false
+#         repository: 'qiduoduo-inc/front-circle-node-server'
+#         ref: dev
+#         token: ${{ secrets.token }}
+#         path: front-circle-node-server
 
-    - name: '下载测试项目'
-      uses: actions/checkout@v3
-      with:
-        persist-credentials: false
-        repository: 'qiduoduo-inc/front-circle-test'
-        token: ${{ secrets.token }}
-        ref: dev
-        path: front-circle-test
+#     - name: '下载测试项目'
+#       uses: actions/checkout@v3
+#       with:
+#         persist-credentials: false
+#         repository: 'qiduoduo-inc/front-circle-test'
+#         token: ${{ secrets.token }}
+#         ref: dev
+#         path: front-circle-test
 
-    - name: '下载测试数据'
-      uses: actions/checkout@v3
-      with:
-        persist-credentials: false
-        repository: qiduoduo-inc/front-circle-data
-        token: ${{ secrets.token }}
-        ref: 'dev'
-        path: front-circle-data
+#     - name: '下载测试数据'
+#       uses: actions/checkout@v3
+#       with:
+#         persist-credentials: false
+#         repository: qiduoduo-inc/front-circle-data
+#         token: ${{ secrets.token }}
+#         ref: 'dev'
+#         path: front-circle-data
 
-    - name: '配置Node 16.15.1环境'
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16.15.1'
+#     - name: '配置Node 16.15.1环境'
+#       uses: actions/setup-node@v3
+#       with:
+#         node-version: '16.15.1'
 
-    - name: 'npm登录npm.pkg.github.com私有镜像'
-      uses: healthplace/npmrc-registry-login-action@v1.0.9
-      with:
-        scope: '@qiduoduo-inc'
-        registry: 'https://npm.pkg.github.com'
-        auth-token: ${{ secrets.token }}
-        path: /home/runner/
+#     - name: 'npm登录npm.pkg.github.com私有镜像'
+#       uses: healthplace/npmrc-registry-login-action@v1.0.9
+#       with:
+#         scope: '@qiduoduo-inc'
+#         registry: 'https://npm.pkg.github.com'
+#         auth-token: ${{ secrets.token }}
+#         path: /home/runner/
 
-    - name: '使用缓存安装npm依赖包'
-      uses: bahmutov/npm-install@v1
-      with:
-        useLockFile: true
-        working-directory: front-circle-node-server
+#     - name: '使用缓存安装npm依赖包'
+#       uses: bahmutov/npm-install@v1
+#       with:
+#         useLockFile: true
+#         working-directory: front-circle-node-server
 
-    - name: '使用缓存安装npm依赖包2'
-      uses: bahmutov/npm-install@v1
-      with:
-        useLockFile: true
-        working-directory: front-circle-test
+#     - name: '使用缓存安装npm依赖包2'
+#       uses: bahmutov/npm-install@v1
+#       with:
+#         useLockFile: true
+#         working-directory: front-circle-test
 
-    - name: '启动server'
-      run: 'cd front-circle-node-server; nohup npm run dev &'
+#     - name: '启动server'
+#       run: 'cd front-circle-node-server; nohup npm run dev &'
 
-    - name: '等待server启动'
-      run: 'sleep 15'
+#     - name: '等待server启动'
+#       run: 'sleep 15'
 
-    - name: '安装playwright'
-      uses: maxmilton/action-setup-playwright@v1
-      with:
-          browsers: chromium
-          headless: true
+#     - name: '安装playwright'
+#       uses: maxmilton/action-setup-playwright@v1
+#       with:
+#           browsers: chromium
+#           headless: true
 
-    - name: '执行playwright测试'
-      run: 'cd front-circle-test; npx playwright test tests/backend/midway/'
+#     - name: '执行playwright测试'
+#       run: 'cd front-circle-test; npx playwright test tests/backend/midway/'
 
   # test_job1:
   #   runs-on: [self-hosted, test]
@@ -123,6 +143,7 @@ jobs:
   #    - run: echo $NODE_ENV
 #   test_job3:
 #     runs-on: [self-hosted, test]
+#     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idservices
 #     services:
 #       nginx:
 #         image: nginx
