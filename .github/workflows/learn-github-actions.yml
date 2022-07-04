@@ -2,7 +2,6 @@ name: "[CI] Pre Pull Request Test 合并之前的接口测试"
 on:
   push:
     # types: [opened, reopened ]
-
 jobs:
   test_job1:
     runs-on: ubuntu-latest
