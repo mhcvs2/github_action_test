@@ -94,7 +94,7 @@ jobs:
       run: 'cd front-circle-node-server; nohup npm run dev &'
 
     - name: '等待server启动'
-      run: 'timeout 30 sh -c 'until nc -z localhost 9000; do sleep 1; done''
+      run: 'timeout 30 sh -c "until nc -z localhost 9000; do sleep 1; done"'
 
     - name: '安装playwright'
       uses: maxmilton/action-setup-playwright@v1
