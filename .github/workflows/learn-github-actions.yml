@@ -70,7 +70,7 @@ jobs:
 
         mysql_ip=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' mysql`
 
-        # wait mysql
+        echo "wait mysql started"
         timeout 30 sh -c "until nc -z ${mysql_ip} 3306; do sleep 1; done"
         echo mysql started.
 
@@ -81,9 +81,10 @@ jobs:
         docker run -itd --name redis  -p 6379:6379 redis:6.0 --requirepass "123456"
         redis_ip=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' redis`
 
-        # wait redis
+        echo "wait redis started"
         timeout 30 sh -c "until nc -z ${redis_ip} 6379; do sleep 1; done"
-
+        echo "redis started"
+        
         # 查看状态
         docker ps -a
     
