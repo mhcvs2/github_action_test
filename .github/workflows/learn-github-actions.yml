@@ -43,7 +43,7 @@ jobs:
       with:
         scope: '@qiduoduo-inc'
         registry: 'https://npm.pkg.github.com'
-        auth-token: ${{ secrets.NPM_LOGIN_NO_EXPIRE }}
+        auth-token: ${{ secrets.token }}
         path: /home/runner/
 
     - name: '使用缓存安装npm依赖包'
