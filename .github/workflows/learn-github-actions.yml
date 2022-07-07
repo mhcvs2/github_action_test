@@ -46,7 +46,7 @@ jobs:
         auth-token: ${{ secrets.token }}
         path: /home/runner/
     
-    - run: npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" a.txt |jq .[-1]
+    - run: npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" |jq .[-1]
 
     # - name: '使用缓存安装npm依赖包'
     #   uses: bahmutov/npm-install@v1
