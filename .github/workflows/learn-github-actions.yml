@@ -67,10 +67,10 @@ jobs:
         echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
 
     - run: echo ${{ env.current_version_is_bigger }}
-      if: env.current_version_is_bigger == "True"
+      if: env.current_version_is_bigger == 'True'
     
     - run: echo bala
-      if: env.current_version_is_bigger == "False"
+      if: env.current_version_is_bigger == 'False'
     
 
   test_job2:
