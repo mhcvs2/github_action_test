@@ -38,46 +38,67 @@ jobs:
     #   with:
     #     node-version: '16.15.1'
 
-    - name: '下载测试项目'
-      uses: actions/checkout@v3
-      with:
-        persist-credentials: false
-        repository: 'qiduoduo-inc/front-circle-common'
-        token: ${{ secrets.token }}
-        ref: dev
+      - name: '下载测试项目'
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          repository: 'qiduoduo-inc/front-circle-common'
+          token: ${{ secrets.token }}
+          ref: dev
 
-    - name: 'npm登录npm.pkg.github.com私有镜像'
-      uses: healthplace/npmrc-registry-login-action@v1.0.9
-      with:
-        scope: '@qiduoduo-inc'
-        registry: 'https://npm.pkg.github.com'
-        auth-token: ${{ secrets.token }}
-        path: /home/runner/
+      - name: 'npm登录npm.pkg.github.com私有镜像'
+        uses: healthplace/npmrc-registry-login-action@v1.0.9
+        with:
+          scope: '@qiduoduo-inc'
+          registry: 'https://npm.pkg.github.com'
+          auth-token: ${{ secrets.token }}
+          path: /home/runner/
     
-    - run: |
-        recent_release_version=`npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" |jq .[-1]`
-        echo recent_release_version is ${recent_release_version}
+      - name: '判断当前版本号是否比已发布的更新'
+        run: |
+            # 获取github packages里的最新版本
+            recent_release_version=`npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" |jq .[-1]`
+            echo recent_release_version is ${recent_release_version}
 
-        current_version=`cat package.json | jq .version`
-        echo current_version is ${current_version}
-        python --version
-        res=`echo ${current_version}:${recent_release_version} | python3 -c "s=input(); ss=s.split(':'); print(ss[0] > ss[1])"`
-        echo current_version is bigger than recent_release_version is: ${res}
-        
-        echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
+            # 读取本次提交的版本号
+            current_version=`cat package.json | jq .version`
+            echo current_version is ${current_version}
+            
+            # 比较当前版本和github packages里的最新版本
+            res=`echo ${current_version}:${recent_release_version} | python3 -c "s=input(); ss=s.split(':'); print(ss[0] > ss[1])"`
+            echo current_version is bigger than recent_release_version is: ${res}
+            
+            # 将结果注册到env
+            echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
+      
+      - if: env.current_version_is_bigger == 'False'
+        run: "echo wo do not publish for this push"
 
-    - run: echo ${{ env.current_version_is_bigger }}
-      if: env.current_version_is_bigger == 'True'
-    
-    - run: echo bala
-      if: env.current_version_is_bigger == 'False'
-    
+      - name: '运行编译'
+        if: env.current_version_is_bigger == 'True'
+        run: npm run build
 
-  test_job2:
-    # if: env.current_version_is_bigger == "True"
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo ${{ env.current_version_is_bigger }}
+      - name: "获取 package.json 里的版本号"
+        if: env.current_version_is_bigger == 'True'
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - name: '创建 release 发版'
+        if: env.current_version_is_bigger == 'True'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_NO_EXPIRE }}
+        with:
+          tag_name: ${{ steps.package-version.outputs.current-version }}
+          release_name: ${{ steps.package-version.outputs.current-version }}
+          draft: false
+          prerelease: false
+
+      - name: '运行 npm 发布'
+        if: env.current_version_is_bigger == 'True'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_NO_EXPIRE }}
 
     # - name: '使用缓存安装npm依赖包'
     #   uses: bahmutov/npm-install@v1
