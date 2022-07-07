@@ -64,11 +64,12 @@ jobs:
         echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
 
     - run: echo ${{ env.current_version_is_bigger }}
+    
   test_job2:
-    if: env.current_version_is_bigger == "True"
+    # if: env.current_version_is_bigger == "True"
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello current"
+      - run: echo ${{ env.current_version_is_bigger }}
 
     # - name: '使用缓存安装npm依赖包'
     #   uses: bahmutov/npm-install@v1
