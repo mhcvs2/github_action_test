@@ -64,7 +64,7 @@ jobs:
         echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
 
   test_job2:
-    if current_version_is_bigger == "True"
+    if: current_version_is_bigger == "True"
     runs-on: ubuntu-latest
     steps:
       - run: echo "hello current"
