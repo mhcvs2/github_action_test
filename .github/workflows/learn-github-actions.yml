@@ -61,7 +61,7 @@ jobs:
         current_version=`cat package.json | jq .version`
         echo current_version is ${current_version}
 
-        res=`echo ${current_version}:${recent_release_version} | python -c "s=raw_input(); ss=s.split(':'); print(ss[0] > ss[1])""`
+        res=`echo ${current_version}:${recent_release_version} | python -c "s=raw_input(); ss=s.split(':'); print(ss[0] > ss[1])"`
         echo current_version is bigger than recent_release_version is: ${res}
         
         echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
