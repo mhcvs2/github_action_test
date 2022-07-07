@@ -38,6 +38,14 @@ jobs:
     #   with:
     #     node-version: '16.15.1'
 
+    - name: '下载测试项目'
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        repository: 'qiduoduo-inc/front-circle-common'
+        token: ${{ secrets.token }}
+        ref: dev
+
     - name: 'npm登录npm.pkg.github.com私有镜像'
       uses: healthplace/npmrc-registry-login-action@v1.0.9
       with:
@@ -46,7 +54,20 @@ jobs:
         auth-token: ${{ secrets.token }}
         path: /home/runner/
     
-    - run: npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" |jq .[-1]
+    - run: |
+        recent_release_version=`npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" |jq .[-1]`
+        echo recent_release_version is ${recent_release_version}
+        current_version=`cat package.json | jq .version`
+        echo current_version is ${current_version}
+        res=`echo ${current_version}:${recent_release_version} | python - c "s=raw_input(); ss=s.split(':'); print(ss[0] > ss[1])"`
+        echo current_version is bigger than recent_release_version is: ${res}
+        echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
+
+  test_job2:
+    if current_version_is_bigger == "True"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "hello current"
 
     # - name: '使用缓存安装npm依赖包'
     #   uses: bahmutov/npm-install@v1
