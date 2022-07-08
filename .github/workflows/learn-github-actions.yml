@@ -6,6 +6,31 @@ jobs:
   test_job1:
     runs-on: ubuntu-latest
     steps:
+      - name: '下载当前 front-circle-node-server 仓库的代码'
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          repository: 'qiduoduo-inc/front-circle-node-server'
+          ref: dev
+          token: ${{ secrets.token }}
+
+      - name: '登录 Github 私有镜像源 npm.pkg.github.com'
+        uses: healthplace/npmrc-registry-login-action@v1.0.9
+        with:
+          scope: '@qiduoduo-inc'
+          registry: 'https://npm.pkg.github.com'
+          auth-token: ${{ secrets.token }}
+          path: /home/runner/
+
+      - name: '使用缓存安装 front-circle-node-server 项目的 npm 依赖包'
+        uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+          working-directory: packages/front-circle-data
+
+      - name: 执行ci测试
+        run: npm run ci:test
+        working-directory: packages/front-circle-data
     # - name: '下载要合并的分支代码'
     #   uses: actions/checkout@v3
     #   with:
@@ -38,67 +63,67 @@ jobs:
     #   with:
     #     node-version: '16.15.1'
 
-      - name: '下载测试项目'
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          repository: 'qiduoduo-inc/front-circle-common'
-          token: ${{ secrets.token }}
-          ref: dev
+      # - name: '下载测试项目'
+      #   uses: actions/checkout@v3
+      #   with:
+      #     persist-credentials: false
+      #     repository: 'qiduoduo-inc/front-circle-common'
+      #     token: ${{ secrets.token }}
+      #     ref: dev
 
-      - name: 'npm登录npm.pkg.github.com私有镜像'
-        uses: healthplace/npmrc-registry-login-action@v1.0.9
-        with:
-          scope: '@qiduoduo-inc'
-          registry: 'https://npm.pkg.github.com'
-          auth-token: ${{ secrets.token }}
-          path: /home/runner/
+      # - name: 'npm登录npm.pkg.github.com私有镜像'
+      #   uses: healthplace/npmrc-registry-login-action@v1.0.9
+      #   with:
+      #     scope: '@qiduoduo-inc'
+      #     registry: 'https://npm.pkg.github.com'
+      #     auth-token: ${{ secrets.token }}
+      #     path: /home/runner/
     
-      - name: '判断当前版本号是否比已发布的更新'
-        run: |
-            # 获取github packages里的最新版本
-            recent_release_version=`npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" |jq .[-1]`
-            echo recent_release_version is ${recent_release_version}
+      # - name: '判断当前版本号是否比已发布的更新'
+      #   run: |
+      #       # 获取github packages里的最新版本
+      #       recent_release_version=`npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" |jq .[-1]`
+      #       echo recent_release_version is ${recent_release_version}
 
-            # 读取本次提交的版本号
-            current_version=`cat package.json | jq .version`
-            echo current_version is ${current_version}
+      #       # 读取本次提交的版本号
+      #       current_version=`cat package.json | jq .version`
+      #       echo current_version is ${current_version}
             
-            # 比较当前版本和github packages里的最新版本
-            res=`echo ${current_version}:${recent_release_version} | python3 -c "s=input(); ss=s.split(':'); print(ss[0] > ss[1])"`
-            echo current_version is bigger than recent_release_version is: ${res}
+      #       # 比较当前版本和github packages里的最新版本
+      #       res=`echo ${current_version}:${recent_release_version} | python3 -c "s=input(); ss=s.split(':'); print(ss[0] > ss[1])"`
+      #       echo current_version is bigger than recent_release_version is: ${res}
             
-            # 将结果注册到env
-            echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
+      #       # 将结果注册到env
+      #       echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
       
-      - if: env.current_version_is_bigger == 'False'
-        run: "echo wo do not publish for this push"
+      # - if: env.current_version_is_bigger == 'False'
+      #   run: "echo wo do not publish for this push"
 
-      - name: '运行编译'
-        if: env.current_version_is_bigger == 'True'
-        run: npm run build
+      # - name: '运行编译'
+      #   if: env.current_version_is_bigger == 'True'
+      #   run: npm run build
 
-      - name: "获取 package.json 里的版本号"
-        if: env.current_version_is_bigger == 'True'
-        id: package-version
-        uses: martinbeentjes/npm-get-version-action@main
+      # - name: "获取 package.json 里的版本号"
+      #   if: env.current_version_is_bigger == 'True'
+      #   id: package-version
+      #   uses: martinbeentjes/npm-get-version-action@main
 
-      - name: '创建 release 发版'
-        if: env.current_version_is_bigger == 'True'
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_NO_EXPIRE }}
-        with:
-          tag_name: ${{ steps.package-version.outputs.current-version }}
-          release_name: ${{ steps.package-version.outputs.current-version }}
-          draft: false
-          prerelease: false
+      # - name: '创建 release 发版'
+      #   if: env.current_version_is_bigger == 'True'
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_NO_EXPIRE }}
+      #   with:
+      #     tag_name: ${{ steps.package-version.outputs.current-version }}
+      #     release_name: ${{ steps.package-version.outputs.current-version }}
+      #     draft: false
+      #     prerelease: false
 
-      - name: '运行 npm 发布'
-        if: env.current_version_is_bigger == 'True'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_NO_EXPIRE }}
+      # - name: '运行 npm 发布'
+      #   if: env.current_version_is_bigger == 'True'
+      #   run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_NO_EXPIRE }}
 
     # - name: '使用缓存安装npm依赖包'
     #   uses: bahmutov/npm-install@v1
