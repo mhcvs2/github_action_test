@@ -14,6 +14,8 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v23.1
+        with:
+          path: front-circle-node-server
 
       - name: List all changed files
         run: |
