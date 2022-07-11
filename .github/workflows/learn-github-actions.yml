@@ -16,10 +16,17 @@ jobs:
 
       - name: List all changed files
         run: |
+           echo "changed=False" >> $GITHUB_ENV
+           target=".github/workflows"
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
+            res=`echo $file:$target | python3 -c "s=input(); ss=s.split(':'); print(ss[1] in ss[0])"`
+            if [[ "${res}" == "True" ]]; then
+               echo "changed=${res}" >> $GITHUB_ENV
+              break
+            fi
           done
-          echo  ${{ steps.changed-files.outputs }}
+      - run: echo ${{env.changed}}
       # - name: '下载当前 front-circle-node-server 仓库的代码'
       #   uses: actions/checkout@v3
       #   with:
