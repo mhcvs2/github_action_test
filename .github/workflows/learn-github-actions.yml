@@ -6,31 +6,44 @@ jobs:
   test_job1:
     runs-on: ubuntu-latest
     steps:
-      - name: '下载当前 front-circle-node-server 仓库的代码'
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
-          persist-credentials: false
-          repository: 'qiduoduo-inc/front-circle-node-server'
-          ref: dev
-          token: ${{ secrets.token }}
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
-      - name: '登录 Github 私有镜像源 npm.pkg.github.com'
-        uses: healthplace/npmrc-registry-login-action@v1.0.9
-        with:
-          scope: '@qiduoduo-inc'
-          registry: 'https://npm.pkg.github.com'
-          auth-token: ${{ secrets.token }}
-          path: /home/runner/
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v23.1
 
-      - name: '使用缓存安装 front-circle-node-server 项目的 npm 依赖包'
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-          working-directory: packages/front-circle-data
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+      # - name: '下载当前 front-circle-node-server 仓库的代码'
+      #   uses: actions/checkout@v3
+      #   with:
+      #     persist-credentials: false
+      #     repository: 'qiduoduo-inc/front-circle-node-server'
+      #     ref: dev
+      #     token: ${{ secrets.token }}
 
-      - name: 执行ci测试
-        run: npm run ci:test
-        working-directory: packages/front-circle-data
+      # - name: '登录 Github 私有镜像源 npm.pkg.github.com'
+      #   uses: healthplace/npmrc-registry-login-action@v1.0.9
+      #   with:
+      #     scope: '@qiduoduo-inc'
+      #     registry: 'https://npm.pkg.github.com'
+      #     auth-token: ${{ secrets.token }}
+      #     path: /home/runner/
+
+      # - name: '使用缓存安装 front-circle-node-server 项目的 npm 依赖包'
+      #   uses: bahmutov/npm-install@v1
+      #   with:
+      #     useLockFile: false
+      #     working-directory: packages/front-circle-data
+
+      # - name: 执行ci测试
+      #   run: npm run ci:test
+      #   working-directory: packages/front-circle-data
     # - name: '下载要合并的分支代码'
     #   uses: actions/checkout@v3
     #   with:
