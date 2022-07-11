@@ -20,7 +20,7 @@ jobs:
       - name: List all changed files
         run: |
            echo "changed=False" >> $GITHUB_ENV
-           target=".github/workflows2"
+           target=".github/workflows"
            for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
              echo "$file was changed"
              res=`echo $file:$target | python3 -c "s=input(); ss=s.split(':'); print(ss[1] in ss[0])"`
