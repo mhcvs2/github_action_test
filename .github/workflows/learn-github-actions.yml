@@ -19,6 +19,7 @@ jobs:
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
+          echo  ${{ steps.changed-files.outputs }}
       # - name: '下载当前 front-circle-node-server 仓库的代码'
       #   uses: actions/checkout@v3
       #   with:
