@@ -6,30 +6,31 @@ jobs:
   test_job1:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
-          path: front-circle-node-server
+     - run: nc --version
+      # - uses: actions/checkout@v3
+      #   with:
+      #     fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+      #     path: front-circle-node-server
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v23.1
-        with:
-          path: front-circle-node-server
+      # - name: Get changed files
+      #   id: changed-files
+      #   uses: tj-actions/changed-files@v23.1
+      #   with:
+      #     path: front-circle-node-server
 
-      - name: List all changed files
-        run: |
-           echo "changed=False" >> $GITHUB_ENV
-           target=".github/workflows"
-           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-             echo "$file was changed"
-             res=`echo $file:$target | python3 -c "s=input(); ss=s.split(':'); print(ss[1] in ss[0])"`
-             if [[ "${res}" == "True" ]]; then
-                echo "changed=${res}" >> $GITHUB_ENV
-                break
-             fi
-           done
-      - run: echo ${{env.changed}}
+      # - name: List all changed files
+      #   run: |
+      #      echo "changed=False" >> $GITHUB_ENV
+      #      target=".github/workflows"
+      #      for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+      #        echo "$file was changed"
+      #        res=`echo $file:$target | python3 -c "s=input(); ss=s.split(':'); print(ss[1] in ss[0])"`
+      #        if [[ "${res}" == "True" ]]; then
+      #           echo "changed=${res}" >> $GITHUB_ENV
+      #           break
+      #        fi
+      #      done
+      # - run: echo ${{env.changed}}
       # - name: '下载当前 front-circle-node-server 仓库的代码'
       #   uses: actions/checkout@v3
       #   with:
