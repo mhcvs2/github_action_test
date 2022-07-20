@@ -1,20 +1,232 @@
-name: learn-github-actions
-# on: [push]
+name: "[CI] Pre Pull Request Test 合并之前的接口测试"
 on:
-  pull_request:
-    types: [opened, reopened ]
-    # branched: 
-    # - dev
+  push:
+    # types: [opened, reopened ]
 jobs:
   test_job1:
-    runs-on: [self-hosted, test]
-    steps: 
-    - run: echo ${{github.head_ref}}
-    - uses: actions/checkout@v3
-      with: 
-        ref: '${{github.head_ref}}'
-    - run: echo pull request opened....
-    - run: cat a.py
+    runs-on: ubuntu-latest
+    steps:
+     - run: egrep --help
+      # - uses: actions/checkout@v3
+      #   with:
+      #     fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+      #     path: front-circle-node-server
+
+      # - name: Get changed files
+      #   id: changed-files
+      #   uses: tj-actions/changed-files@v23.1
+      #   with:
+      #     path: front-circle-node-server
+
+      # - name: List all changed files
+      #   run: |
+      #      echo "changed=False" >> $GITHUB_ENV
+      #      target=".github/workflows"
+      #      for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+      #        echo "$file was changed"
+      #        res=`echo $file:$target | python3 -c "s=input(); ss=s.split(':'); print(ss[1] in ss[0])"`
+      #        if [[ "${res}" == "True" ]]; then
+      #           echo "changed=${res}" >> $GITHUB_ENV
+      #           break
+      #        fi
+      #      done
+      # - run: echo ${{env.changed}}
+      # - name: '下载当前 front-circle-node-server 仓库的代码'
+      #   uses: actions/checkout@v3
+      #   with:
+      #     persist-credentials: false
+      #     repository: 'qiduoduo-inc/front-circle-node-server'
+      #     ref: dev
+      #     token: ${{ secrets.token }}
+
+      # - name: '登录 Github 私有镜像源 npm.pkg.github.com'
+      #   uses: healthplace/npmrc-registry-login-action@v1.0.9
+      #   with:
+      #     scope: '@qiduoduo-inc'
+      #     registry: 'https://npm.pkg.github.com'
+      #     auth-token: ${{ secrets.token }}
+      #     path: /home/runner/
+
+      # - name: '使用缓存安装 front-circle-node-server 项目的 npm 依赖包'
+      #   uses: bahmutov/npm-install@v1
+      #   with:
+      #     useLockFile: false
+      #     working-directory: packages/front-circle-data
+
+      # - name: 执行ci测试
+      #   run: npm run ci:test
+      #   working-directory: packages/front-circle-data
+    # - name: '下载要合并的分支代码'
+    #   uses: actions/checkout@v3
+    #   with:
+    #     persist-credentials: false
+    #     repository: 'qiduoduo-inc/front-circle-node-server'
+    #     ref: dev
+    #     token: ${{ secrets.token }}
+    #     path: front-circle-node-server
+
+    # - name: '下载测试项目'
+    #   uses: actions/checkout@v3
+    #   with:
+    #     persist-credentials: false
+    #     repository: 'qiduoduo-inc/front-circle-test'
+    #     token: ${{ secrets.token }}
+    #     ref: dev
+    #     path: front-circle-test
+
+    # - name: '下载测试数据'
+    #   uses: actions/checkout@v3
+    #   with:
+    #     persist-credentials: false
+    #     repository: qiduoduo-inc/front-circle-data
+    #     token: ${{ secrets.token }}
+    #     ref: 'dev'
+    #     path: front-circle-data
+
+    # - name: '配置Node 16.15.1环境'
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: '16.15.1'
+
+      # - name: '下载测试项目'
+      #   uses: actions/checkout@v3
+      #   with:
+      #     persist-credentials: false
+      #     repository: 'qiduoduo-inc/front-circle-common'
+      #     token: ${{ secrets.token }}
+      #     ref: dev
+
+      # - name: 'npm登录npm.pkg.github.com私有镜像'
+      #   uses: healthplace/npmrc-registry-login-action@v1.0.9
+      #   with:
+      #     scope: '@qiduoduo-inc'
+      #     registry: 'https://npm.pkg.github.com'
+      #     auth-token: ${{ secrets.token }}
+      #     path: /home/runner/
+    
+      # - name: '判断当前版本号是否比已发布的更新'
+      #   run: |
+      #       # 获取github packages里的最新版本
+      #       recent_release_version=`npm view  @qiduoduo-inc/front-circle-common versions | sed "s/'/\"/g" |jq .[-1]`
+      #       echo recent_release_version is ${recent_release_version}
+
+      #       # 读取本次提交的版本号
+      #       current_version=`cat package.json | jq .version`
+      #       echo current_version is ${current_version}
+            
+      #       # 比较当前版本和github packages里的最新版本
+      #       res=`echo ${current_version}:${recent_release_version} | python3 -c "s=input(); ss=s.split(':'); print(ss[0] > ss[1])"`
+      #       echo current_version is bigger than recent_release_version is: ${res}
+            
+      #       # 将结果注册到env
+      #       echo "current_version_is_bigger=${res}" >> $GITHUB_ENV
+      
+      # - if: env.current_version_is_bigger == 'False'
+      #   run: "echo wo do not publish for this push"
+
+      # - name: '运行编译'
+      #   if: env.current_version_is_bigger == 'True'
+      #   run: npm run build
+
+      # - name: "获取 package.json 里的版本号"
+      #   if: env.current_version_is_bigger == 'True'
+      #   id: package-version
+      #   uses: martinbeentjes/npm-get-version-action@main
+
+      # - name: '创建 release 发版'
+      #   if: env.current_version_is_bigger == 'True'
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_NO_EXPIRE }}
+      #   with:
+      #     tag_name: ${{ steps.package-version.outputs.current-version }}
+      #     release_name: ${{ steps.package-version.outputs.current-version }}
+      #     draft: false
+      #     prerelease: false
+
+      # - name: '运行 npm 发布'
+      #   if: env.current_version_is_bigger == 'True'
+      #   run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_NO_EXPIRE }}
+
+    # - name: '使用缓存安装npm依赖包'
+    #   uses: bahmutov/npm-install@v1
+    #   with:
+    #     useLockFile: false
+    #     working-directory: front-circle-node-server
+
+    # - name: '使用缓存安装npm依赖包2'
+    #   uses: bahmutov/npm-install@v1
+    #   with:
+    #     useLockFile: false
+    #     working-directory: front-circle-test
+
+    # - name: '启动MySQL 5.7和Redis服务'
+    #   run: |
+    #     # 启动mysql
+    #     docker run -itd -p 3306:3306  \
+    #       --name mysql \
+    #       -e  MYSQL_ROOT_PASSWORD=123456 \
+    #       -e MYSQL_DATABASE=front_circle_test \
+    #       -v ${PWD}/database/:/tmp/database/ \
+    #       mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+
+    #     mysql_ip=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' mysql`
+
+    #     echo "wait mysql started"
+    #     timeout 30 sh -c "until nc -z ${mysql_ip} 3306; do sleep 1; done"
+    #     echo mysql started.
+
+    #     # 初始化数据库的表结构
+    #     docker exec -i mysql mysql  -p123456  front_circle_test < front-circle-node-server/node_modules/@qiduoduo-inc/front-circle-db/db/front_circle.sql
+
+    #     # 启动redis
+    #     docker run -itd --name redis  -p 6379:6379 redis:6.0 --requirepass "123456"
+    #     redis_ip=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' redis`
+
+    #     echo "wait redis started"
+    #     timeout 30 sh -c "until nc -z ${redis_ip} 6379; do sleep 1; done"
+    #     echo "redis started"
+
+    #     # 查看状态
+    #     docker ps -a
+
+    # - name: '运行代码规范检查'
+    #   run: "npm run ci:lint  --max-old-space-size=4096"
+    #   working-directory: front-circle-node-server
+
+    # - name: '运行单元测试检查'
+    #   run: "npm run ci:test  --max-old-space-size=4096"
+    #   working-directory: front-circle-node-server
+
+    # - name: '启动server'
+    #   run: 'nohup npm run dev &'
+    #   working-directory: front-circle-node-server
+
+    # - name: '等待server启动'
+    #   run: 'timeout 30 sh -c "until nc -z localhost 9000; do sleep 1; done"'
+
+    # - name: '安装playwright'
+    #   uses: maxmilton/action-setup-playwright@v1
+    #   with:
+    #       # 可选项: chromium, firefox, webkit
+    #       browsers: chromium
+    #       headless: true
+
+    # - name: '执行playwright测试'
+    #   run: 'npx playwright test tests/backend/midway/'
+    #   working-directory: front-circle-test
+
+  # test_job1:
+  #   runs-on: [self-hosted, test]
+  #   steps: 
+  #   - run: echo ${{github.head_ref}}
+  #   - uses: actions/checkout@v3
+  #     with: 
+  #       ref: '${{github.head_ref}}'
+  #   - run: echo pull request opened....
+  #   - run: cat a.py
 #  test_job1:
 #    runs-on: [self-hosted]
 #    steps:
@@ -56,6 +268,7 @@ jobs:
   #    - run: echo $NODE_ENV
 #   test_job3:
 #     runs-on: [self-hosted, test]
+#     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idservices
 #     services:
 #       nginx:
 #         image: nginx
