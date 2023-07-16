@@ -7,3 +7,12 @@ jobs:
     - uses: actions/checkout@v3
     - run: echo pull request was merged....
     - run: cat a.py
+    - uses: actions/checkout@v3
+      with:
+        repository: "git@gitee.com:mhc-opensource/ksc-sdk-python.git"
+        ref: "master"
+        token: '270e59c2c915823aa0a394fd117f6e25'
+        path: "ksc-sdk-python"
+    - run: ls ./
+    - run: ls ./ksc-sdk-python
+
