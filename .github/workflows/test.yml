@@ -1,0 +1,9 @@
+name: test
+on: [push]
+jobs:
+  if_merged:
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: actions/checkout@v3
+    - run: echo pull request was merged....
+    - run: cat a.py
